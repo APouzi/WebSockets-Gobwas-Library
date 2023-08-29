@@ -42,7 +42,31 @@ func WebSocketLowLevel(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	
+	bufwriter := bufio.NewWriter(conn)
+	go func(){
+		for {
+			header := ws.Header{}
+			header.Fin = true
+			header.Rsv = 0
+			header.OpCode = 1
+			header.Masked = false
+			msg := "writing this message!"
+			msgbyte := []byte(msg)
+			header.Length = 21
+			err := ws.WriteHeader(conn, header)
+			if err != nil{
+				fmt.Println("header error:", err)
+				return
+			}
+			// ws.Cipher( msgbyte, header.Mask, 0)
 			
+			_, err = bufwriter.Write(msgbyte)
+			bufwriter.Flush()
+			if err != nil{
+				fmt.Println(err)
+				return
+			}
+			time.Sleep(time.Second * 1)
 		}
 	}()
 	return
