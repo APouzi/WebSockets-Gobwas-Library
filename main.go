@@ -12,7 +12,7 @@ func main() {
 	fmt.Println("Starting GobWas Server")
 	http.HandleFunc("/ws", WebSocket)
 	http.HandleFunc("/ws-stream", WebSocketStreamToClient)
-	// http.HandleFunc("/ws-low-level",WebSocket2)
+	http.HandleFunc("/ws-low-level",WebSocketLowLevel)
 	err :=  http.ListenAndServe(":8080", nil)
 	if err != nil{
 		fmt.Println("error is yeah", err)
