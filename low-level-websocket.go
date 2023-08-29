@@ -17,21 +17,23 @@ func WebSocketLowLevel(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close()
 	bufReader := bufio.NewReaderSize(wr.Reader, 300)
-	for {
-		header, err := ws.ReadHeader(wr.Reader)
-		if err != nil{
-			fmt.Println("header error:", err)
-			continue
+	go func(){
+		for {
+			header, err := ws.ReadHeader(wr.Reader)
+			if err != nil{
+				fmt.Println("header error:", err)
+				continue
+			}
+			payload := make([]byte, header.Length)
+			
+			bufReader.Read(payload)
+			if err != nil{
+				fmt.Println(err)
+				continue
+			}
+			ws.Cipher(payload,header.Mask,0)
+			fmt.Println(string(payload))
+			
 		}
-		payload := make([]byte, header.Length)
-		
-		bufReader.Read(payload)
-		if err != nil{
-			fmt.Println(err)
-			continue
-		}
-		ws.Cipher(payload,header.Mask,0)
-		fmt.Println(string(payload))
-		
-	}
+	}()
 }
