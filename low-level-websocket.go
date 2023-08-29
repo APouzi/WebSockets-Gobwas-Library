@@ -41,7 +41,7 @@ func WebSocketLowLevel(w http.ResponseWriter, r *http.Request) {
 		}
 	}()
 
-	
+
 	bufwriter := bufio.NewWriter(conn)
 	go func(){
 		for {
@@ -69,5 +69,4 @@ func WebSocketLowLevel(w http.ResponseWriter, r *http.Request) {
 			time.Sleep(time.Second * 1)
 		}
 	}()
-	return
 }
