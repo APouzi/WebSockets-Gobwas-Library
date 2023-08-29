@@ -33,6 +33,15 @@ func WebSocketLowLevel(w http.ResponseWriter, r *http.Request) {
 			}
 			ws.Cipher(payload,header.Mask,0)
 			fmt.Println(string(payload))
+			if header.OpCode == ws.OpClose{
+				fmt.Println("hit")
+				conn.Close()
+				return
+			}
+		}
+	}()
+
+	
 			
 		}
 	}()
